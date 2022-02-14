@@ -7,18 +7,13 @@ public class PlayerManager : MonoBehaviour
 
     Rigidbody2D rb2d;
 
-
     public float speed;
-
     public float jumpSpeed;
     public float doubleJumpSpeed;
-
     public float dashTotalDuration;
     private float dashSpeed;
     private float dashTimer;
     public float dashDistance;
-   
-
 
     public bool facingRight;
     public bool facingLeft;
@@ -26,13 +21,12 @@ public class PlayerManager : MonoBehaviour
     public bool isGrounded;
     public bool canDoubleJump;
 
-
     Time time;
     // Start is called before the first frame update
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        transform.position = new Vector3(0.5153801f, -127.968f, 0.0f);
+        transform.position = new Vector3(-240.3f, -176.6f, 0.0f);
         isGrounded = true;
         facingRight = true;
         dashSpeed = dashDistance / dashTotalDuration;
@@ -86,7 +80,7 @@ public class PlayerManager : MonoBehaviour
             MoveRight();
             if (Input.GetKey(KeyCode.LeftControl) && dashTotalDuration <= 0)
             {
-                //Dash();
+                Dash();
             }
 
         }
@@ -96,7 +90,7 @@ public class PlayerManager : MonoBehaviour
 
             if (Input.GetKey(KeyCode.LeftControl) && dashTotalDuration <= 0)
             {
-                //Dash();
+                Dash();
             }
 
         }
@@ -148,14 +142,14 @@ public class PlayerManager : MonoBehaviour
     public void MoveRight()
     {
         rb2d.velocity = new Vector2(speed , rb2d.velocity.y);
-        gameObject.transform.localScale = new Vector3(0.08290367f, 0.09702073f, 1);
+        gameObject.transform.localScale = new Vector3(1, 1, 1);
         facingRight = true;
         facingLeft = false;
     }
     public void MoveLeft()
     {
         rb2d.velocity = new Vector2(-speed , rb2d.velocity.y);
-        gameObject.transform.localScale = new Vector3(-0.08290367f, 0.09702073f, 1);
+        gameObject.transform.localScale = new Vector3(-1, 1, 1);
         facingRight = false;
         facingLeft = true;
     }
