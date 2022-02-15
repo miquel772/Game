@@ -17,7 +17,7 @@ public class EnemiePathing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       moveEnemy();
+        moveEnemy();
     }
 
     private void moveEnemy()
@@ -25,12 +25,12 @@ public class EnemiePathing : MonoBehaviour
         if (isMoving)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetTile.transform.position, moveSpeed * Time.deltaTime);
-        }  
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "TargetTile")
+        if (collision.gameObject.tag == "TargetTile")
         {
             isMoving = false;
         }
