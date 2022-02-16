@@ -13,6 +13,7 @@ public class PlayerManager : MonoBehaviour
 
     private int runningID;
     private int jumpingID;
+    private int GPoundingID;
 
     private Vector2 spdVector;
     private Vector2 prevSpd;
@@ -26,12 +27,14 @@ public class PlayerManager : MonoBehaviour
     private bool jumpPerformed;
     private bool canWallJump;
     private bool canDoubleJump;
+    private bool isGPounding;
 
     public float moveSpeed = 4;
     public float jumpSpeed = 300;
     public float doubleJumpSpeed = 200;
-    public float dashCouldown;
+    public float dashCooldown;
     public float dashForce = 30;
+    public float groundpoundForce = 400;
 
     // Start is called before the first frame update
     void Start()
@@ -41,14 +44,17 @@ public class PlayerManager : MonoBehaviour
         anim = GetComponent<Animator>();
         spr_render = GetComponent<SpriteRenderer>();
 
+        //idleID = Animator.StringToHash("isMoving");
         runningID = Animator.StringToHash("isMoving");
         jumpingID = Animator.StringToHash("isJumping");
+        GPoundingID = Animator.StringToHash("isGPounding");
 
         isRunning = false;
         isJumping = true;
         wasJumping = false;
         jumpPerformed = true;
         canWallJump = false;
+        isGPounding = false;
 
         moveDir = Direction.NONE;
     }
@@ -58,14 +64,15 @@ public class PlayerManager : MonoBehaviour
     {
         moveDir = Direction.NONE;
         isRunning = false;
+        isGPounding = false;
 
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D))
         {
             isRunning = true;
             moveDir = Direction.RIGHT;
             spr_render.flipX = false;
         }
-        else if (Input.GetKey(KeyCode.LeftArrow))
+        else if (Input.GetKey(KeyCode.A))
         {
             isRunning = true;
             moveDir = Direction.LEFT;
@@ -93,8 +100,15 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
+        if (Input.GetKey(KeyCode.S))
+        {
+            isGPounding = true;
+            rb2d.gravityScale = groundpoundForce;
+        }
 
 
+
+        anim.SetBool(GPoundingID, isGPounding);
         anim.SetBool(runningID, isRunning);
         if (wasJumping != isJumping)
         {
@@ -106,7 +120,7 @@ public class PlayerManager : MonoBehaviour
     private void FixedUpdate()
     {
         float delta = Time.fixedDeltaTime * 1000;
-        dashCouldown -= Time.deltaTime;
+        dashCooldown -= Time.deltaTime;
         spdVector.y = rb2d.velocity.y;
         switch (moveDir)
         {
@@ -139,7 +153,7 @@ public class PlayerManager : MonoBehaviour
             rb2d.AddForce(new Vector2(jumpSpdX, jumpSpeed * delta));
         }
 
-        if (Input.GetKey(KeyCode.LeftControl) && dashCouldown <= 0)
+        if (Input.GetKey(KeyCode.LeftControl) && dashCooldown <= 0)
         {
             if (spr_render.flipX == false)
             {
@@ -150,13 +164,8 @@ public class PlayerManager : MonoBehaviour
                 rb2d.AddForce(Vector2.left * dashForce * delta, ForceMode2D.Impulse);
             }
 
-            dashCouldown = 2;
+            dashCooldown = 1;
         }
-
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            rb2d.gravityScale = 400;
-        }        
     }
 
     private bool checkRaycastWithScenary(RaycastHit2D[] hits)
