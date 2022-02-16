@@ -802,7 +802,7 @@ GameObject:
   - component: {fileID: 1581709167}
   - component: {fileID: 1581709166}
   m_Layer: 0
-  m_Name: HealthBara
+  m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
